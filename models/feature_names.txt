@@ -1,0 +1,10 @@
+PM2.5
+PM10
+O3
+NO2
+SO2
+CO
+hour
+day_of_week
+month
+is_rush_hour

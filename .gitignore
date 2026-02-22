@@ -1,0 +1,16 @@
+ 
+# API keys
+.env
+api_key_temp.txt
+
+# Virtual environment
+venv/
+__pycache__/
+
+# Data files
+data/*.csv
+*.pkl
+
+# Windows
+Thumbs.db
+.DS_Store
