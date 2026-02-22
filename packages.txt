@@ -1,2 +1,2 @@
 build-essential
-python3.9-dev
+python3-dev
