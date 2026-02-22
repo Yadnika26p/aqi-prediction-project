@@ -1,4 +1,4 @@
+python3.9-dev
+build-essential
 gcc
 g++
-make
-build-essential
