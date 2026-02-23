@@ -96,15 +96,62 @@ tab1, tab2, tab3, tab4 = st.tabs(["🏠 Dashboard", "📈 Prediction", "📊 Ana
 with tab1:
     col1, col2, col3 = st.columns(3)
     
-    with col1:
-        st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-        if st.button("📡 Fetch Live Data", key="fetch_btn", use_container_width=True):
-            try:
-                from config import OPENWEATHER_API_KEY
-                city_data = city_options[selected_city]
+    # with col1:
+    #     st.markdown('<div class="metric-card">', unsafe_allow_html=True)
+    #     if st.button("📡 Fetch Live Data", key="fetch_btn", use_container_width=True):
+    #         try:
+    #             from config import OPENWEATHER_API_KEY
+    #             city_data = city_options[selected_city]
                 
-                url = f"http://api.openweathermap.org/data/2.5/air_pollution?lat={city_data['lat']}&lon={city_data['lon']}&appid={OPENWEATHER_API_KEY}"
+    #             url = f"http://api.openweathermap.org/data/2.5/air_pollution?lat={city_data['lat']}&lon={city_data['lon']}&appid={OPENWEATHER_API_KEY}"
+    #             response = requests.get(url, timeout=10)
+                
+    #             if response.status_code == 200:
+    #                 data = response.json()
+    #                 st.session_state['api_data'] = data
+    #                 st.session_state['last_fetch'] = datetime.now()
+    #                 st.success("✅ Data fetched successfully!")
+    #             else:
+    #                 st.error(f"API Error: {response.status_code}")
+    #         except Exception as e:
+    #             st.error(f"Error: {e}")
+    #     st.markdown('</div>', unsafe_allow_html=True)
+    
+    with col1:
+    st.markdown('<div class="metric-card">', unsafe_allow_html=True)
+    if st.button("📡 Fetch Live Data", key="fetch_btn", use_container_width=True):
+        try:
+            # METHOD 1: Direct from os.environ
+            import os
+            api_key_direct = os.environ.get('OPENWEATHER_API_KEY')
+            
+            # METHOD 2: From config
+            try:
+                from config import OPENWEATHER_API_KEY as config_key
+                api_key_config = config_key
+            except:
+                api_key_config = None
+            
+            # Show ALL debug info
+            st.write("🔍 **DEBUG INFO:**")
+            st.write(f"All environment keys: {list(os.environ.keys())}")
+            st.write(f"Direct from os.environ: {api_key_direct}")
+            st.write(f"From config: {api_key_config}")
+            
+            if api_key_direct:
+                st.write(f"API Key exists! Length: {len(api_key_direct)}")
+                st.write(f"First 5 chars: {api_key_direct[:5]}...")
+                
+                # Try the API call
+                city_data = city_options[selected_city]
+                url = f"http://api.openweathermap.org/data/2.5/air_pollution?lat={city_data['lat']}&lon={city_data['lon']}&appid={api_key_direct}"
+                
+                st.write(f"Calling: {url.replace(api_key_direct, 'HIDDEN')}")
+                
                 response = requests.get(url, timeout=10)
+                
+                st.write(f"Status Code: {response.status_code}")
+                st.write(f"Response: {response.text[:200]}")  # First 200 chars
                 
                 if response.status_code == 200:
                     data = response.json()
@@ -113,9 +160,12 @@ with tab1:
                     st.success("✅ Data fetched successfully!")
                 else:
                     st.error(f"API Error: {response.status_code}")
-            except Exception as e:
-                st.error(f"Error: {e}")
-        st.markdown('</div>', unsafe_allow_html=True)
+            else:
+                st.error("❌ API Key not found in environment!")
+                
+        except Exception as e:
+            st.error(f"Error: {e}")
+            st.exception(e)  # This shows full error trace
     
     with col2:
         st.markdown('<div class="metric-card">', unsafe_allow_html=True)
