@@ -3,27 +3,27 @@ ADVANCED GUI for AQI Prediction Project
 Run with: streamlit run gui_advanced.py
 """
 import streamlit as st
-# ADD THIS LINE RIGHT AFTER:
-st.set_page_config(page_title="AQI Prediction", page_icon="📊", layout="wide")
-# Then remove the existing st.set_page_config (line 14-18) - it will be duplicate
 
-import pandas as pd
-import numpy as np
-import requests
-import plotly.graph_objects as go
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
-sys.path.append(os.getcwd())
-
-# Page config
+# Page config - MUST BE FIRST Streamlit command (ONLY ONCE!)
 st.set_page_config(
     page_title="AQI Prediction",
     page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+# Then all other imports
+import pandas as pd
+import numpy as np
+import requests
+import plotly.graph_objects as go
+import plotly.express as px
+from datetime import datetime, timedelta
+import sys
+import os
+
+# Add the project root to path
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # Custom CSS
 st.markdown("""
